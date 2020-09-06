@@ -122,6 +122,9 @@ public class gui extends Application {
         CheckBox chkKennel = new CheckBox();
         CheckBox chkAntiba = new CheckBox();
 
+        animalFactor.setVisible(false);
+        animalFactorTxt.setVisible(false);
+
         petOwnerPane.add(firstName, 0,0);
         petOwnerPane.add(middleInitial, 1, 0);
         petOwnerPane.add(lastName, 2, 0);
@@ -170,7 +173,6 @@ public class gui extends Application {
         vaccinationPane.add(antibaBox, 0, 2);
         vaccinationPane.add(animalFactor, 0 ,3);
         vaccinationPane.add(animalFactorTxt, 0 ,4);
-
 
         discountPane.add(discountAmount, 0, 0);
         discountPane.add(discountTxt, 1, 0);
@@ -230,10 +232,17 @@ public class gui extends Application {
         });
 
         chkAntiba.setOnAction(e -> {
-            if (chkAntiba.isSelected())
+            if (chkAntiba.isSelected()) {
+                animalFactor.setVisible(true);
+                animalFactorTxt.setVisible(true);
                 currentTransaction.setAntivaVSelected(true);
-            else
+            }
+            else {
+                animalFactor.setVisible(false);
+                animalFactorTxt.setVisible(false);
                 currentTransaction.setAntivaVSelected(false);
+            }
+
         });
 
         //ActionEvent handler for the clear button, when there is text, the output field is cleared.
@@ -247,68 +256,100 @@ public class gui extends Application {
         }
 
         btnSubmit.setOnAction(e -> {
+            if (isPetOwnerFilled(firstNameTxt, middleInitialTxt, lastNameTxt, phoneNumberTxt) && isPetInfoFilled(petNametxt, speciesTxt, weightTxt)) {
 
-            if (discountTxt.getText() != null)
-                currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
+                if (isNumeric(weightTxt.getText()))
+                    currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
+                else {
+                    displayError("Pet Weight");
+                    weightTxt.setText("0");
+                    currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
+                }
 
-            if (weightTxt.getText() != null)
-                currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
+                if (!discountTxt.getText().equals("")) {
+                    if (isNumeric(discountTxt.getText()))
+                        currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
+                    else {
+                        displayError("Discount");
+                        discountTxt.setText("0");
+                        currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
+                    }
+                }
+                else {
+                    discountTxt.setText("0");
+                    currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
+                }
 
-            if (animalFactorTxt.getText() != null)
-                currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+                if (chkAntiba.isSelected()) {
+                    if (!animalFactorTxt.getText().equals(""))
+                        if (isNumeric(animalFactorTxt.getText()))
+                            currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+                        else {
+                            displayError("Animal Factor");
+                            animalFactorTxt.setText("1");
+                            currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+                        }
+                    else
+                        displayError(animalFactor.getText());
+                }
 
-            PetOwner owner = new PetOwner(
-                    firstNameTxt.getText(),
-                    middleInitialTxt.getText(),
-                    lastNameTxt.getText(),
-                    phoneNumberTxt.getText()
-            );
+                PetOwner owner = new PetOwner(
+                        firstNameTxt.getText(),
+                        middleInitialTxt.getText(),
+                        lastNameTxt.getText(),
+                        phoneNumberTxt.getText()
+                );
 
-            Pet pet = new Pet(
-                    petNametxt.getText(),
-                    speciesTxt.getText(),
-                    Integer.parseInt(weightTxt.getText())
-            );
+                Pet pet = new Pet(
+                        petNametxt.getText(),
+                        speciesTxt.getText(),
+                        Integer.parseInt(weightTxt.getText())
+                );
 
-            receiptOutput.setText(
-                    "------------------------------- VETS 'R' US -------------------------------\n"
-                    + "Customer Information\n\n"
-                    + "\t\tCustomer Name:\t" + owner.getFullName() + "\n"
-                    + "\t\tPhone Number:\t\t" + owner.getPhoneNumber() + "\n"
-                    + "\nPet Information\n\n"
-                    + "\t\tPet Name:\t\t" + pet.getPetName() + "\n"
-                    + "\t\tPet Species:\t" + pet.getPetSpecies() + "\n"
-                    + "\t\tPet Weight:\t\t" + pet.getPetWeight() + "lbs\n"
-                    + "\nTransaction Info\n"
-/*                    + "\nSubtotal: $" + currentTransaction.getSubtotal()*/
-/*                    + "\nTotal: $" + currentTransaction.getTotal()*/
-            );
+                receiptOutput.setText(
+                        "------------------------------- VETS 'R' US -------------------------------\n"
+                                + "Customer Information\n\n"
+                                + "\t\tCustomer Name:\t" + owner.getFullName() + "\n"
+                                + "\t\tPhone Number:\t\t" + owner.getPhoneNumber() + "\n"
+                                + "\nPet Information\n\n"
+                                + "\t\tPet Name:\t\t" + pet.getPetName() + "\n"
+                                + "\t\tPet Species:\t" + pet.getPetSpecies() + "\n"
+                                + "\t\tPet Weight:\t\t" + pet.getPetWeight() + "lbs\n"
+                                + "\nTransaction Info\n"
+                );
 
-            if (currentTransaction.getOfficeVisitSelected())
-                receiptOutput.appendText("\n\t\t$" + currentTransaction.getOfficeVisitPrice() + "\tOffice Visit");
+                if (currentTransaction.getOfficeVisitSelected())
+                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getOfficeVisitPrice() + "\tOffice Visit");
 
-            if (currentTransaction.getXRaySelected())
-                receiptOutput.appendText("\n\t\t$" + currentTransaction.getXRayPrice() + "\tX-Ray");
+                if (currentTransaction.getXRaySelected())
+                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getXRayPrice() + "\tX-Ray");
 
-            if (currentTransaction.getSpecExamSelected())
-                receiptOutput.appendText("\n\t\t$" + currentTransaction.getSpecExamPrice() + "\tSpecimen Examination");
+                if (currentTransaction.getSpecExamSelected())
+                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getSpecExamPrice() + "\tSpecimen Examination");
 
-            if (currentTransaction.getRabiesSelected())
-                receiptOutput.appendText("\n\t\t$" + currentTransaction.getRabiesPrice() + "\tRabies Vaccination");
+                if (currentTransaction.getRabiesSelected())
+                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getRabiesPrice() + "\tRabies Vaccination");
 
-            if (currentTransaction.getKennelCoughSelected())
-                receiptOutput.appendText("\n\t\t$" + currentTransaction.getKennelCoughPrice() + "\tKennel Cough Vaccination");
+                if (currentTransaction.getKennelCoughSelected())
+                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getKennelCoughPrice() + "\tKennel Cough Vaccination");
 
-            if (currentTransaction.getAntibaVSelected()) {
-                for (int i = 0; i < currentTransaction.getUnitsAdministered(); i++)
-                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getAntibaVPrice() + "\tAntiba-V Vaccination");
-            }
+                if (currentTransaction.getAntibaVSelected()) {
+                    for (int i = 0; i < currentTransaction.getUnitsAdministered(); i++)
+                        receiptOutput.appendText("\n\t\t$" + currentTransaction.getAntibaVPrice() + "\tAntiba-V Vaccination");
+                }
 
-            receiptOutput.appendText(
-                     "\n\nSubtotal: $" + currentTransaction.getSubtotal()
-                     + "\nTotal: $" + currentTransaction.getTotal()
-            );
+                if (currentTransaction.getDiscount() > 0)
+                    receiptOutput.appendText("\n\n\t\t$-" + currentTransaction.getDiscount() + "\tDiscount Amount");
 
+                receiptOutput.appendText(
+                        "\n\nSubtotal: $" + currentTransaction.getSubtotal() + " + $" + currentTransaction.getTax() + " Sales Tax\n"
+                                + "\nGrand Total: $" + currentTransaction.getTotal()
+                );
+
+                receiptOutput.appendText("\n---------------------------------------------------------------------------\n");
+
+            } else
+                displayError("Pet and Owner Info");
         });
 
         //Adds all panes to a scene and sets scene size.
@@ -324,13 +365,34 @@ public class gui extends Application {
         primaryStage.show();
     }
 
-    	//Displays an error message, intended for when fields are not filled.
-    	public static void displayError() {
-    		Stage errorStage =  new Stage();
-    		errorStage.setTitle("Error");
-    		errorStage.setScene(new Scene(new StackPane(new Label("Error! Please make sure all fields are filled!")), 400, 50));
-    		errorStage.show();
-    		errorStage.setResizable(false); //Error message window not resizable
-    	}
+    private boolean isPetInfoFilled(TextField petNametxt, TextField speciesTxt, TextField weightTxt) {
+        return !petNametxt.getText().equals("")
+                && !speciesTxt.getText().equals("")
+                && !weightTxt.getText().equals("");
+    }
 
+    private boolean isPetOwnerFilled(TextField firstNameTxt, TextField middleInitialTxt, TextField lastNameTxt, TextField phoneNumberTxt) {
+        return !firstNameTxt.getText().equals("")
+                && !middleInitialTxt.getText().equals("")
+                && !lastNameTxt.getText().equals("")
+                && !phoneNumberTxt.getText().equals("");
+    }
+
+    //Displays an error message, intended for when fields are not filled.
+    public static void displayError(String issue) {
+        Stage errorStage =  new Stage();
+        errorStage.setTitle("Error");
+        errorStage.setScene(new Scene(new StackPane(new Label("Error! Please make sure " + issue.trim() + " is filled correctly!")), 400, 50));
+        errorStage.show();
+        errorStage.setResizable(false); //Error message window not resizable
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
 }

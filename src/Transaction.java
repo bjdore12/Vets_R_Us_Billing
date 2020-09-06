@@ -46,11 +46,17 @@ public class Transaction {
     }
 
     public void setAnimalFactor(double animalFactor) {
-        this.animalFactor = animalFactor;
+        if (animalFactor > 0)
+            this.animalFactor = animalFactor;
+        else
+            this.animalFactor = 1;
     }
 
     public void setAnimalWeight(double animalWeight) {
-        this.animalWeight = animalWeight;
+        if (animalWeight > 0)
+            this.animalWeight = animalWeight;
+        else
+            this.animalWeight = 1;
     }
 
     public void setDiscountAmount(double discountAmount) {
@@ -117,6 +123,8 @@ public class Transaction {
         return ANTIVA_V;
     }
 
+    public double getSalesTax() { return MICH_SALES_TAX; }
+
     public double getUnitsAdministered() {
         return (Math.round(getAnimalWeight()) / getAnimalFactor());
     }
@@ -143,14 +151,18 @@ public class Transaction {
         if (getAntibaVSelected())
             subtotal += getUnitsAdministered() * ANTIVA_V;
 
-        return subtotal;
+        if (discountAmount > 0)
+            subtotal -= discountAmount;
+
+        return (Math.round(subtotal * 100) / 100.0);
+    }
+
+    public double getTax() {
+        return (Math.round((getSubtotal() * getSalesTax()) * 100) / 100.0);
     }
 
     public double getTotal() {
         double total = getSubtotal();
-
-        if (discountAmount > 0)
-            total -= discountAmount;
 
         total = total * (1.0 + MICH_SALES_TAX);
 
