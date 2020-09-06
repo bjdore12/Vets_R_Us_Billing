@@ -16,6 +16,7 @@ public class gui extends Application {
         Transaction currentTransaction = new Transaction();
 
         Button btnSubmit = new Button("Submit");
+        Button btnClear = new Button("Clear");
 
         //VBox will be used to hold all the panes to be placed in a scene
         VBox vBox = new VBox();
@@ -25,6 +26,9 @@ public class gui extends Application {
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(10, 10, 5, 10));
         hBox.setSpacing(10);
+
+        HBox buttonsBox = new HBox();
+        buttonsBox.setSpacing(10);
 
         HBox officeVisitBox = new HBox();
         HBox xRayBox = new HBox();
@@ -177,6 +181,9 @@ public class gui extends Application {
         discountPane.add(discountAmount, 0, 0);
         discountPane.add(discountTxt, 1, 0);
 
+        buttonsBox.getChildren().add(btnSubmit);
+        buttonsBox.getChildren().add(btnClear);
+
         vBox.getChildren().add(petOwnerInfo);
         vBox.getChildren().add(petOwnerPane);
 
@@ -189,7 +196,7 @@ public class gui extends Application {
         vBox.getChildren().add(discounts);
         vBox.getChildren().add(discountPane);
 
-        vBox.getChildren().add(btnSubmit);
+        vBox.getChildren().add(buttonsBox);
 
         outputBox.getChildren().add(receiptOutput);
 
@@ -245,15 +252,7 @@ public class gui extends Application {
 
         });
 
-        //ActionEvent handler for the clear button, when there is text, the output field is cleared.
-        class ClearHandler implements EventHandler<ActionEvent> {
-            @Override
-            public void handle(ActionEvent event) {
-                if (receiptOutput.getText() != null) {
-                    receiptOutput.setText(null);
-                }
-            }
-        }
+        btnClear.setOnAction(new ClearHandler(receiptOutput));
 
         btnSubmit.setOnAction(e -> {
             if (isPetOwnerFilled(firstNameTxt, middleInitialTxt, lastNameTxt, phoneNumberTxt) && isPetInfoFilled(petNametxt, speciesTxt, weightTxt)) {
@@ -307,7 +306,7 @@ public class gui extends Application {
                 );
 
                 receiptOutput.setText(
-                        "------------------------------- VETS 'R' US -------------------------------\n"
+                        "-------------------------------- VETS 'R' US --------------------------------\n"
                                 + "Customer Information\n\n"
                                 + "\t\tCustomer Name:\t" + owner.getFullName() + "\n"
                                 + "\t\tPhone Number:\t\t" + owner.getPhoneNumber() + "\n"
@@ -346,7 +345,7 @@ public class gui extends Application {
                                 + "\nGrand Total: $" + currentTransaction.getTotal()
                 );
 
-                receiptOutput.appendText("\n---------------------------------------------------------------------------\n");
+                receiptOutput.appendText("\n-----------------------------------------------------------------------------\n");
 
             } else
                 displayError("Pet and Owner Info");
@@ -362,6 +361,7 @@ public class gui extends Application {
         primaryStage.setMinWidth(1000);
         primaryStage.setMaxHeight(800);
         primaryStage.setMinHeight(800);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
