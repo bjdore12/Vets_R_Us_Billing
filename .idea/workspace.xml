@@ -20,11 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a2b7d59b-ed03-4a98-99e1-d7dce9f2627d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Vets 'R' Us/Vaccination.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Vets 'R' Us/Transaction.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Vets 'R' Us/Transaction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Vets 'R' Us/gui$1ClearHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Vets 'R' Us/gui$1ClearHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Vets 'R' Us/gui.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Vets 'R' Us/gui.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vaccination.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +100,7 @@
       <workItem from="1599260595775" duration="1631000" />
       <workItem from="1599262394834" duration="30000" />
       <workItem from="1599262439769" duration="39000" />
-      <workItem from="1599322374118" duration="7810000" />
+      <workItem from="1599322374118" duration="13082000" />
     </task>
     <servers />
   </component>
@@ -124,38 +124,38 @@
       <screen x="0" y="23" width="1920" height="989" />
     </state>
     <state x="793" y="221" key="#com.intellij.ide.util.MemberChooser/0.23.1920.989@0.23.1920.989" timestamp="1599322504028" />
-    <state width="1666" height="242" key="GridCell.Tab.0.bottom" timestamp="1599417167714">
+    <state width="1666" height="242" key="GridCell.Tab.0.bottom" timestamp="1599422812212">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="242" key="GridCell.Tab.0.bottom/0.23.1920.989@0.23.1920.989" timestamp="1599417167714" />
-    <state width="1666" height="242" key="GridCell.Tab.0.center" timestamp="1599417167713">
+    <state width="1666" height="242" key="GridCell.Tab.0.bottom/0.23.1920.989@0.23.1920.989" timestamp="1599422812212" />
+    <state width="1666" height="242" key="GridCell.Tab.0.center" timestamp="1599422812211">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="242" key="GridCell.Tab.0.center/0.23.1920.989@0.23.1920.989" timestamp="1599417167713" />
-    <state width="1666" height="242" key="GridCell.Tab.0.left" timestamp="1599417167713">
+    <state width="1666" height="242" key="GridCell.Tab.0.center/0.23.1920.989@0.23.1920.989" timestamp="1599422812211" />
+    <state width="1666" height="242" key="GridCell.Tab.0.left" timestamp="1599422812211">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="242" key="GridCell.Tab.0.left/0.23.1920.989@0.23.1920.989" timestamp="1599417167713" />
-    <state width="1666" height="242" key="GridCell.Tab.0.right" timestamp="1599417167713">
+    <state width="1666" height="242" key="GridCell.Tab.0.left/0.23.1920.989@0.23.1920.989" timestamp="1599422812211" />
+    <state width="1666" height="242" key="GridCell.Tab.0.right" timestamp="1599422812212">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="242" key="GridCell.Tab.0.right/0.23.1920.989@0.23.1920.989" timestamp="1599417167713" />
-    <state width="1666" height="300" key="GridCell.Tab.1.bottom" timestamp="1599416659531">
+    <state width="1666" height="242" key="GridCell.Tab.0.right/0.23.1920.989@0.23.1920.989" timestamp="1599422812212" />
+    <state width="1666" height="300" key="GridCell.Tab.1.bottom" timestamp="1599420817838">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="300" key="GridCell.Tab.1.bottom/0.23.1920.989@0.23.1920.989" timestamp="1599416659531" />
-    <state width="1666" height="300" key="GridCell.Tab.1.center" timestamp="1599416659530">
+    <state width="1666" height="300" key="GridCell.Tab.1.bottom/0.23.1920.989@0.23.1920.989" timestamp="1599420817838" />
+    <state width="1666" height="300" key="GridCell.Tab.1.center" timestamp="1599420817838">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="300" key="GridCell.Tab.1.center/0.23.1920.989@0.23.1920.989" timestamp="1599416659530" />
-    <state width="1666" height="300" key="GridCell.Tab.1.left" timestamp="1599416659530">
+    <state width="1666" height="300" key="GridCell.Tab.1.center/0.23.1920.989@0.23.1920.989" timestamp="1599420817838" />
+    <state width="1666" height="300" key="GridCell.Tab.1.left" timestamp="1599420817837">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="300" key="GridCell.Tab.1.left/0.23.1920.989@0.23.1920.989" timestamp="1599416659530" />
-    <state width="1666" height="300" key="GridCell.Tab.1.right" timestamp="1599416659531">
+    <state width="1666" height="300" key="GridCell.Tab.1.left/0.23.1920.989@0.23.1920.989" timestamp="1599420817837" />
+    <state width="1666" height="300" key="GridCell.Tab.1.right" timestamp="1599420817838">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state width="1666" height="300" key="GridCell.Tab.1.right/0.23.1920.989@0.23.1920.989" timestamp="1599416659531" />
+    <state width="1666" height="300" key="GridCell.Tab.1.right/0.23.1920.989@0.23.1920.989" timestamp="1599420817838" />
     <state x="673" y="337" key="com.intellij.ide.util.TipDialog" timestamp="1599260594864">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
@@ -164,9 +164,9 @@
       <screen x="0" y="23" width="1920" height="989" />
     </state>
     <state x="718" y="254" key="extract.method.dialog/0.23.1920.989@0.23.1920.989" timestamp="1599416758599" />
-    <state x="645" y="247" width="670" height="676" key="search.everywhere.popup" timestamp="1599411501277">
+    <state x="645" y="247" width="670" height="676" key="search.everywhere.popup" timestamp="1599418588114">
       <screen x="0" y="23" width="1920" height="989" />
     </state>
-    <state x="645" y="247" width="670" height="676" key="search.everywhere.popup/0.23.1920.989@0.23.1920.989" timestamp="1599411501277" />
+    <state x="645" y="247" width="670" height="676" key="search.everywhere.popup/0.23.1920.989@0.23.1920.989" timestamp="1599418588114" />
   </component>
 </project>

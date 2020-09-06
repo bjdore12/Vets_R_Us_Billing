@@ -8,11 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-
 public class gui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        Transaction currentTransaction = new Transaction();
 
         Button btnSubmit = new Button("Submit");
 
@@ -95,7 +96,6 @@ public class gui extends Application {
         Label rabiesVac = new Label("Rabies ($8.00)");
         Label kennelVac = new Label("Kennel Cough ($6.00)");
         Label antibaVac = new Label("Antiva-V ($5.00/Unit Administered)");
-
         Label discountAmount = new Label("Discount: ");
 
         Label animalFactor = new Label("Animal Factor:");
@@ -171,6 +171,7 @@ public class gui extends Application {
         vaccinationPane.add(animalFactor, 0 ,3);
         vaccinationPane.add(animalFactorTxt, 0 ,4);
 
+
         discountPane.add(discountAmount, 0, 0);
         discountPane.add(discountTxt, 1, 0);
 
@@ -193,6 +194,48 @@ public class gui extends Application {
         hBox.getChildren().add(vBox);
         hBox.getChildren().add(outputBox);
 
+        chkOfficeVisit.setOnAction(e -> {
+            if (chkOfficeVisit.isSelected())
+                currentTransaction.setOfficeVisitSelected(true);
+            else
+                currentTransaction.setOfficeVisitSelected(false);
+        });
+
+        chkXRay.setOnAction(e -> {
+            if (chkXRay.isSelected())
+                currentTransaction.setxRaySelected(true);
+            else
+                currentTransaction.setxRaySelected(false);
+        });
+
+        chkSpecExam.setOnAction(e -> {
+            if (chkSpecExam.isSelected())
+                currentTransaction.setSpecExamSelected(true);
+            else
+                currentTransaction.setSpecExamSelected(false);
+        });
+
+        chkRabies.setOnAction(e -> {
+            if (chkRabies.isSelected())
+                currentTransaction.setRabiesSelected(true);
+            else
+                currentTransaction.setRabiesSelected(false);
+        });
+
+        chkKennel.setOnAction(e -> {
+            if (chkKennel.isSelected())
+                currentTransaction.setKennelCoughSelected(true);
+            else
+                currentTransaction.setKennelCoughSelected(false);
+        });
+
+        chkAntiba.setOnAction(e -> {
+            if (chkAntiba.isSelected())
+                currentTransaction.setAntivaVSelected(true);
+            else
+                currentTransaction.setAntivaVSelected(false);
+        });
+
         //ActionEvent handler for the clear button, when there is text, the output field is cleared.
         class ClearHandler implements EventHandler<ActionEvent> {
             @Override
@@ -204,6 +247,16 @@ public class gui extends Application {
         }
 
         btnSubmit.setOnAction(e -> {
+
+            if (discountTxt.getText() != null)
+                currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
+
+            if (weightTxt.getText() != null)
+                currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
+
+            if (animalFactorTxt.getText() != null)
+                currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+
             PetOwner owner = new PetOwner(
                     firstNameTxt.getText(),
                     middleInitialTxt.getText(),
@@ -218,13 +271,44 @@ public class gui extends Application {
             );
 
             receiptOutput.setText(
-                    "------------------------------ VETS 'R' US ------------------------------\n" +
-                            "Customer Information\n\n" +
-                    owner.toString() + "\n\n" +
-                    "Pet Information\n\n" +
-                            pet.toString()
-
+                    "------------------------------- VETS 'R' US -------------------------------\n"
+                    + "Customer Information\n\n"
+                    + "\t\tCustomer Name:\t" + owner.getFullName() + "\n"
+                    + "\t\tPhone Number:\t\t" + owner.getPhoneNumber() + "\n"
+                    + "\nPet Information\n\n"
+                    + "\t\tPet Name:\t\t" + pet.getPetName() + "\n"
+                    + "\t\tPet Species:\t" + pet.getPetSpecies() + "\n"
+                    + "\t\tPet Weight:\t\t" + pet.getPetWeight() + "lbs\n"
+                    + "\nTransaction Info\n"
+/*                    + "\nSubtotal: $" + currentTransaction.getSubtotal()*/
+/*                    + "\nTotal: $" + currentTransaction.getTotal()*/
             );
+
+            if (currentTransaction.getOfficeVisitSelected())
+                receiptOutput.appendText("\n\t\t$" + currentTransaction.getOfficeVisitPrice() + "\tOffice Visit");
+
+            if (currentTransaction.getXRaySelected())
+                receiptOutput.appendText("\n\t\t$" + currentTransaction.getXRayPrice() + "\tX-Ray");
+
+            if (currentTransaction.getSpecExamSelected())
+                receiptOutput.appendText("\n\t\t$" + currentTransaction.getSpecExamPrice() + "\tSpecimen Examination");
+
+            if (currentTransaction.getRabiesSelected())
+                receiptOutput.appendText("\n\t\t$" + currentTransaction.getRabiesPrice() + "\tRabies Vaccination");
+
+            if (currentTransaction.getKennelCoughSelected())
+                receiptOutput.appendText("\n\t\t$" + currentTransaction.getKennelCoughPrice() + "\tKennel Cough Vaccination");
+
+            if (currentTransaction.getAntibaVSelected()) {
+                for (int i = 0; i < currentTransaction.getUnitsAdministered(); i++)
+                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getAntibaVPrice() + "\tAntiba-V Vaccination");
+            }
+
+            receiptOutput.appendText(
+                     "\n\nSubtotal: $" + currentTransaction.getSubtotal()
+                     + "\nTotal: $" + currentTransaction.getTotal()
+            );
+
         });
 
         //Adds all panes to a scene and sets scene size.
@@ -235,8 +319,18 @@ public class gui extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaxWidth(1000);
         primaryStage.setMinWidth(1000);
-        primaryStage.setMaxHeight(900);
-        primaryStage.setMinHeight(900);
+        primaryStage.setMaxHeight(800);
+        primaryStage.setMinHeight(800);
         primaryStage.show();
     }
+
+    	//Displays an error message, intended for when fields are not filled.
+    	public static void displayError() {
+    		Stage errorStage =  new Stage();
+    		errorStage.setTitle("Error");
+    		errorStage.setScene(new Scene(new StackPane(new Label("Error! Please make sure all fields are filled!")), 400, 50));
+    		errorStage.show();
+    		errorStage.setResizable(false); //Error message window not resizable
+    	}
+
 }

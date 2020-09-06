@@ -18,6 +18,7 @@ public class Transaction {
     private boolean antivaVSelected;
 
     private double animalFactor;
+    private double animalWeight;
     private double discountAmount;
 
     public void setOfficeVisitSelected(boolean isSelected) {
@@ -48,6 +49,10 @@ public class Transaction {
         this.animalFactor = animalFactor;
     }
 
+    public void setAnimalWeight(double animalWeight) {
+        this.animalWeight = animalWeight;
+    }
+
     public void setDiscountAmount(double discountAmount) {
         this.discountAmount = discountAmount;
     }
@@ -76,11 +81,79 @@ public class Transaction {
         return this.antivaVSelected;
     }
 
+    public double getAnimalWeight() {
+        return this.animalWeight;
+    }
+
     public double getAnimalFactor() {
         return this.animalFactor;
     }
 
     public double getDiscount() {
         return this.discountAmount;
+    }
+
+    public double getOfficeVisitPrice() {
+        return OFFICE_VISIT;
+    }
+
+    public double getXRayPrice() {
+        return X_RAY;
+    }
+
+    public double getSpecExamPrice() {
+        return SPEC_EXAM;
+    }
+
+    public double getRabiesPrice() {
+        return RABIES;
+    }
+
+    public double getKennelCoughPrice() {
+        return KENNEL_COUGH;
+    }
+
+    public double getAntibaVPrice() {
+        return ANTIVA_V;
+    }
+
+    public double getUnitsAdministered() {
+        return (Math.round(getAnimalWeight()) / getAnimalFactor());
+    }
+
+    public double getSubtotal() {
+
+        double subtotal = 0;
+
+        if (getOfficeVisitSelected())
+            subtotal += OFFICE_VISIT;
+
+        if (getXRaySelected())
+            subtotal += X_RAY;
+
+        if (getSpecExamSelected())
+            subtotal += SPEC_EXAM;
+
+        if (getRabiesSelected())
+            subtotal += RABIES;
+
+        if (getKennelCoughSelected())
+            subtotal += KENNEL_COUGH;
+
+        if (getAntibaVSelected())
+            subtotal += getUnitsAdministered() * ANTIVA_V;
+
+        return subtotal;
+    }
+
+    public double getTotal() {
+        double total = getSubtotal();
+
+        if (discountAmount > 0)
+            total -= discountAmount;
+
+        total = total * (1.0 + MICH_SALES_TAX);
+
+        return (Math.round(total * 100) / 100.0);
     }
 }
