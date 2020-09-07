@@ -317,6 +317,8 @@ public class GUI extends Application {
                         }
                     }
                     else {
+                        animalFactorTxt.setText("1");
+                        currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
                         displayError(animalFactor.getText());
                     }
                 }
