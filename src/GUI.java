@@ -316,8 +316,9 @@ public class GUI extends Application {
                             currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
                         }
                     }
-                    else
+                    else {
                         displayError(animalFactor.getText());
+                    }
                 }
 
                 if (isNumeric(weightTxt.getText()))
