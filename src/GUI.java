@@ -1,3 +1,13 @@
+/*
+
+    Author: Benjamin J. Dore
+    Date:   9/4/2020
+
+    Description:    Main user interface class, contains the definition of the user interface view
+                    as well as the functionality when buttons are selected
+
+*/
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -8,11 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.text.DecimalFormat;
-
 public class GUI extends Application {
-
-    private static DecimalFormat df = new DecimalFormat("#.##");
 
     @Override
     public void start(Stage primaryStage) {
@@ -22,7 +28,6 @@ public class GUI extends Application {
         Button btnSubmit = new Button("Submit");
         Button btnClear = new Button("Clear");
 
-        //VBox will be used to hold all the panes to be placed in a scene
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10, 10, 5, 10));
         vBox.setSpacing(10);
@@ -31,21 +36,25 @@ public class GUI extends Application {
         hBox.setPadding(new Insets(10, 10, 5, 10));
         hBox.setSpacing(10);
 
+        // HBox holds the submit and clear buttons
         HBox buttonsBox = new HBox();
         buttonsBox.setSpacing(10);
 
+        // The following HBoxes hold the check boxes and labels for Office Visit, X-Ray, and Specimen Exam services
         HBox officeVisitBox = new HBox();
         HBox xRayBox = new HBox();
         HBox specExamBox = new HBox();
 
+        // The following HBoxes hold the check boxes and labels for Rabies, Kennel Cough, and Antiba-V Vaccinations
         HBox rabiesBox = new HBox();
         HBox kennelBox = new HBox();
         HBox antibaBox = new HBox();
 
+        // Holds the output textarea where the receipt will be printed
         StackPane outputBox = new StackPane();
         outputBox.setPadding(new Insets(10, 10, 5, 10));
 
-        //Primary GridPane to hold labels and text fields
+        // GridPane to hold labels and text fields for the pet owner
         GridPane petOwnerPane = new GridPane();
         petOwnerPane.setPadding(new Insets(10, 30, 10, 10));
         petOwnerPane.setAlignment(Pos.CENTER);
@@ -53,6 +62,7 @@ public class GUI extends Application {
         petOwnerPane.setVgap(10);
         petOwnerPane.setStyle("-fx-background-color: #e6e6e6; -fx-border-color: #999999;");
 
+        // GridPane to hold labels and text fields for the pet
         GridPane petPane = new GridPane();
         petPane.setPadding(new Insets(10, 30, 10, 10));
         petPane.setAlignment(Pos.CENTER);
@@ -60,6 +70,7 @@ public class GUI extends Application {
         petPane.setVgap(10);
         petPane.setStyle("-fx-background-color: #e6e6e6; -fx-border-color: #999999;");
 
+        // GridPane to hold labels and text fields for the visit information (i.e. the services requested)
         GridPane visitPane = new GridPane();
         visitPane.setPadding(new Insets(10, 30, 10, 10));
         visitPane.setAlignment(Pos.CENTER_LEFT);
@@ -67,6 +78,7 @@ public class GUI extends Application {
         visitPane.setVgap(10);
         visitPane.setStyle("-fx-background-color: #e6e6e6; -fx-border-color: #999999;");
 
+        // GridPane to hold labels and text fields for the vaccinations
         GridPane vaccinationPane = new GridPane();
         vaccinationPane.setPadding(new Insets(10, 100, 10, 15));
         vaccinationPane.setAlignment(Pos.CENTER);
@@ -74,6 +86,7 @@ public class GUI extends Application {
         vaccinationPane.setVgap(10);
         vaccinationPane.setStyle("-fx-background-color: #e2e2e2; -fx-border-color: #999999;");
 
+        // GridPane to hold labels and text fields for the discount field
         GridPane discountPane = new GridPane();
         discountPane.setPadding(new Insets(10, 30, 10, 10));
         discountPane.setAlignment(Pos.CENTER_LEFT);
@@ -81,55 +94,68 @@ public class GUI extends Application {
         discountPane.setVgap(10);
         discountPane.setStyle("-fx-background-color: #e6e6e6; -fx-border-color: #999999;");
 
-        //All labels
+        // Titles for the different sections in the application
         Label petOwnerInfo = new Label("Pet Owner Information");
         Label petInformation = new Label("Pet Information");
         Label reasonForVisit = new Label("Reason for Visit ");
         Label vaccination = new Label("Vaccination");
         Label discounts = new Label("Discounts ");
 
+        // Pet owner info
         Label firstName = new Label("First Name:");
         Label middleInitial = new Label("Middle Initial:");
         Label lastName = new Label("Last Name:");
         Label phoneNumber = new Label("Phone Number:");
 
+        // Pet info
         Label petName = new Label("Pet Name:");
         Label species = new Label("Species:");
         Label weight = new Label("Weight:");
 
+        // Basic office services
         Label officeVisit = new Label("Office Visit ($25.00)");
         Label xRay = new Label("X-Ray ($15.00)");
         Label specimenExam = new Label("Specimen Examination ($12.50)");
 
+        // Vaccinations
         Label rabiesVac = new Label("Rabies ($8.00)");
         Label kennelVac = new Label("Kennel Cough ($6.00)");
         Label antibaVac = new Label("Antiva-V ($5.00/Unit Administered)");
+
         Label discountAmount = new Label("Discount: ");
 
         Label animalFactor = new Label("Animal Factor:");
 
-        //All text fields that will be used to collect input
+        // Text fields for pet owner
         TextField firstNameTxt = new TextField();
         LimitedTextField middleInitialTxt = new LimitedTextField(1);
         TextField lastNameTxt = new TextField();
         LimitedTextField phoneNumberTxt = new LimitedTextField(10);
+
+        // Text fields for pet
         TextField petNametxt = new TextField();
         TextField speciesTxt = new TextField();
         LimitedTextField weightTxt = new LimitedTextField(4);
+
+        // Discount value and animal factor fields
         TextField discountTxt = new TextField();
         LimitedTextField animalFactorTxt = new LimitedTextField(4);
 
+        // Receipt output field, set so user cannot edit
         TextArea receiptOutput = new TextArea();
         receiptOutput.setEditable(false);
 
+        // Basic office services checkboxes
         CheckBox chkOfficeVisit = new CheckBox();
         CheckBox chkXRay = new CheckBox();
         CheckBox chkSpecExam = new CheckBox();
 
+        // Vaccine check boxes
         CheckBox chkRabies = new CheckBox();
         CheckBox chkKennel = new CheckBox();
         CheckBox chkAntiba = new CheckBox();
 
+        // Animal factor and text field are hidden, so long as Antiba-V is not selected
         animalFactor.setVisible(false);
         animalFactorTxt.setVisible(false);
 

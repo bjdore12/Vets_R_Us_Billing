@@ -10,9 +10,10 @@
 
 public class Pet {
 
+    // Basic pet information
     private String petName;
     private String petSpecies;
-    private int petWeight;          // TODO: may need to be a double
+    private int petWeight;
 
     public Pet(String petName, String petSpecies, int petWeight) {
         this.petName = petName;

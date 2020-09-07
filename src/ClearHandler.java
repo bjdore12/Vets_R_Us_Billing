@@ -1,3 +1,14 @@
+/*
+
+    Author: Benjamin J. Dore
+    Date:   9/4/2020
+
+    Description:    Clear handler class is designed to handle what happens when the user
+                    hits the 'Clear' button. Resets the interface back to default so the user
+                    can start a new transaction
+
+*/
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
@@ -8,6 +19,8 @@ import javafx.scene.control.TextField;
 import javax.xml.soap.Text;
 
 class ClearHandler implements EventHandler<ActionEvent> {
+
+    //Below fields are for all inputs and outputs of the UI that will be reset
     TextArea output;
 
     TextField firstName;
@@ -69,6 +82,7 @@ class ClearHandler implements EventHandler<ActionEvent> {
         this.currentTransaction = currentTransaction;
     }
 
+    // Clear everything and reset the UI
     @Override
     public void handle(ActionEvent event) {
         if (output.getText() != null) {

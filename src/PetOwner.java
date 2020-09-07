@@ -10,6 +10,7 @@
 
 public class PetOwner {
 
+    // Basic owner information
     private String firstName;
     private String middleInitial;
     private String lastName;
