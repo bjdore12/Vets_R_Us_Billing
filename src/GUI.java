@@ -14,7 +14,6 @@ public class GUI extends Application {
 
     private static DecimalFormat df = new DecimalFormat("#.##");
 
-
     @Override
     public void start(Stage primaryStage) {
 
@@ -116,9 +115,9 @@ public class GUI extends Application {
         LimitedTextField phoneNumberTxt = new LimitedTextField(10);
         TextField petNametxt = new TextField();
         TextField speciesTxt = new TextField();
-        TextField weightTxt = new TextField();
+        LimitedTextField weightTxt = new LimitedTextField(4);
         TextField discountTxt = new TextField();
-        TextField animalFactorTxt = new TextField();
+        LimitedTextField animalFactorTxt = new LimitedTextField(4);
 
         TextArea receiptOutput = new TextArea();
         receiptOutput.setEditable(false);
@@ -230,11 +229,13 @@ public class GUI extends Application {
 
         chkAntiba.setOnAction(e -> {
             if (chkAntiba.isSelected()) {
+                animalFactorTxt.setText("1");
                 animalFactor.setVisible(true);
                 animalFactorTxt.setVisible(true);
                 currentTransaction.setAntivaVSelected(true);
             }
             else {
+                animalFactorTxt.setText("");
                 animalFactor.setVisible(false);
                 animalFactorTxt.setVisible(false);
                 currentTransaction.setAntivaVSelected(false);
@@ -278,6 +279,21 @@ public class GUI extends Application {
         btnSubmit.setOnAction(e -> {
             if (isPetOwnerFilled(firstNameTxt, middleInitialTxt, lastNameTxt, phoneNumberTxt) && isPetInfoFilled(petNametxt, speciesTxt, weightTxt)) {
 
+                if (chkAntiba.isSelected()) {
+                    if (!animalFactorTxt.getText().equals("")) {
+                        if (isNumeric(animalFactorTxt.getText())) {
+                            currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+                            if (Double.parseDouble(animalFactorTxt.getText()) == 0) animalFactorTxt.setText("1");
+                        } else {
+                            displayError("Animal Factor");
+                            animalFactorTxt.setText("1");
+                            currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+                        }
+                    }
+                    else
+                        displayError(animalFactor.getText());
+                }
+
                 if (isNumeric(weightTxt.getText()))
                     currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
                 else {
@@ -300,20 +316,6 @@ public class GUI extends Application {
                     currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
                 }
 
-                if (chkAntiba.isSelected()) {
-                    if (!animalFactorTxt.getText().equals(""))
-                        if (isNumeric(animalFactorTxt.getText())) {
-                            currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
-                        }
-                        else {
-                            displayError("Animal Factor");
-                            animalFactorTxt.setText("1");
-                            currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
-                        }
-                    else
-                        displayError(animalFactor.getText());
-                }
-
                 PetOwner owner = new PetOwner(
                         firstNameTxt.getText(),
                         middleInitialTxt.getText(),
@@ -329,7 +331,8 @@ public class GUI extends Application {
 
                 receiptOutput.setText(
                         "-------------------------------- VETS 'R' US --------------------------------\n"
-                                + "Customer Information\n\n"
+                                + "\t\t\t\t\t\t\t" + new DateTime().getDateAndTime()
+                                + "\n\nCustomer Information\n\n"
                                 + "\t\tCustomer Name:\t" + owner.getFullName() + "\n"
                                 + "\t\tPhone Number:\t\t" + owner.getPhoneNumber() + "\n"
                                 + "\nPet Information\n\n"

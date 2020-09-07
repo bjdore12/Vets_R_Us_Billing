@@ -123,7 +123,7 @@ public class Transaction {
     public double getSalesTax() { return MICH_SALES_TAX; }
 
     public double getUnitsAdministered() {
-        if (animalFactor > animalWeight) {
+        if (animalFactor > animalWeight && animalWeight != 0) {
             return this.animalFactor / this.animalFactor;
         }
         return Math.round(this.animalWeight / this.animalFactor);
@@ -172,13 +172,17 @@ public class Transaction {
     }
 
     public double getTax() {
-        return (Math.round((getSubtotal() * getSalesTax()) * 100) / 100.0);
+        if (getSubtotal() > 0)
+            return (Math.round((getSubtotal() * getSalesTax()) * 100) / 100.0);
+        else
+            return 0;
     }
 
     public double getTotal() {
         double total = getSubtotal();
 
-        total = total * (1.0 + MICH_SALES_TAX);
+        if (total > 0)
+            total = total * (1.0 + MICH_SALES_TAX);
 
         return (Math.round(total * 100) / 100.0);
     }

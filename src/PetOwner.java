@@ -55,7 +55,7 @@ public class PetOwner {
     }
 
     public String getPhoneNumber() {
-        return String.valueOf(this.phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
+        return String.valueOf(this.phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
     }
 
     @Override
