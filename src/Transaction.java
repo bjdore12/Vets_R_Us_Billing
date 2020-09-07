@@ -53,10 +53,7 @@ public class Transaction {
     }
 
     public void setAnimalWeight(double animalWeight) {
-        if (animalWeight > 0)
-            this.animalWeight = animalWeight;
-        else
-            this.animalWeight = 1;
+        this.animalWeight = animalWeight;
     }
 
     public void setDiscountAmount(double discountAmount) {
@@ -126,7 +123,23 @@ public class Transaction {
     public double getSalesTax() { return MICH_SALES_TAX; }
 
     public double getUnitsAdministered() {
-        return (Math.round(getAnimalWeight()) / getAnimalFactor());
+        if (animalFactor > animalWeight) {
+            return this.animalFactor / this.animalFactor;
+        }
+        return Math.round(this.animalWeight / this.animalFactor);
+    }
+
+    public void clearTransaction() {
+        this.officeVisitSelected = false;
+        this.xRaySelected = false;
+        this.specExamSelected = false;
+        this.rabiesSelected = false;
+        this.kennelCoughSelected = false;
+        this.antivaVSelected = false;
+
+        this.animalFactor = 0;
+        this.animalWeight = 0;
+        this.discountAmount = 0;
     }
 
     public double getSubtotal() {
@@ -154,7 +167,8 @@ public class Transaction {
         if (discountAmount > 0)
             subtotal -= discountAmount;
 
-        return (Math.round(subtotal * 100) / 100.0);
+        //return (Math.round(subtotal * 100) / 100.0);
+        return subtotal;
     }
 
     public double getTax() {

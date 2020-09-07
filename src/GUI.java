@@ -1,8 +1,6 @@
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,10 +8,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class gui extends Application {
+import java.text.DecimalFormat;
+
+public class GUI extends Application {
+
+    private static DecimalFormat df = new DecimalFormat("#.##");
+
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         Transaction currentTransaction = new Transaction();
 
@@ -206,38 +209,23 @@ public class gui extends Application {
         hBox.getChildren().add(outputBox);
 
         chkOfficeVisit.setOnAction(e -> {
-            if (chkOfficeVisit.isSelected())
-                currentTransaction.setOfficeVisitSelected(true);
-            else
-                currentTransaction.setOfficeVisitSelected(false);
+            currentTransaction.setOfficeVisitSelected(chkOfficeVisit.isSelected());
         });
 
         chkXRay.setOnAction(e -> {
-            if (chkXRay.isSelected())
-                currentTransaction.setxRaySelected(true);
-            else
-                currentTransaction.setxRaySelected(false);
+            currentTransaction.setxRaySelected(chkXRay.isSelected());
         });
 
         chkSpecExam.setOnAction(e -> {
-            if (chkSpecExam.isSelected())
-                currentTransaction.setSpecExamSelected(true);
-            else
-                currentTransaction.setSpecExamSelected(false);
+            currentTransaction.setSpecExamSelected(chkSpecExam.isSelected());
         });
 
         chkRabies.setOnAction(e -> {
-            if (chkRabies.isSelected())
-                currentTransaction.setRabiesSelected(true);
-            else
-                currentTransaction.setRabiesSelected(false);
+            currentTransaction.setRabiesSelected(chkRabies.isSelected());
         });
 
         chkKennel.setOnAction(e -> {
-            if (chkKennel.isSelected())
-                currentTransaction.setKennelCoughSelected(true);
-            else
-                currentTransaction.setKennelCoughSelected(false);
+            currentTransaction.setKennelCoughSelected(chkKennel.isSelected());
         });
 
         chkAntiba.setOnAction(e -> {
@@ -264,37 +252,28 @@ public class gui extends Application {
             }
         });
 
-        // force the phone number field to be numeric only
-        weightTxt.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    weightTxt.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
+        // force the phone number, weight, animal factor and discount field to be numeric only
+        limitNumeric(weightTxt, discountTxt, animalFactorTxt);
 
-        // force the phone number field to be numeric only
-        animalFactorTxt.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    animalFactorTxt.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-
-        // force the phone number field to be numeric only
-        discountTxt.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    discountTxt.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-
-        btnClear.setOnAction(new ClearHandler(receiptOutput));
+        //Clear the output text field
+        btnClear.setOnAction(new ClearHandler(receiptOutput,
+                firstNameTxt,
+                middleInitialTxt,
+                lastNameTxt,
+                phoneNumberTxt,
+                petNametxt,
+                speciesTxt,
+                weightTxt,
+                discountTxt,
+                chkOfficeVisit,
+                chkXRay,
+                chkSpecExam,
+                chkRabies,
+                chkKennel,
+                chkAntiba,
+                animalFactor,
+                animalFactorTxt,
+                currentTransaction));
 
         btnSubmit.setOnAction(e -> {
             if (isPetOwnerFilled(firstNameTxt, middleInitialTxt, lastNameTxt, phoneNumberTxt) && isPetInfoFilled(petNametxt, speciesTxt, weightTxt)) {
@@ -323,8 +302,9 @@ public class gui extends Application {
 
                 if (chkAntiba.isSelected()) {
                     if (!animalFactorTxt.getText().equals(""))
-                        if (isNumeric(animalFactorTxt.getText()))
+                        if (isNumeric(animalFactorTxt.getText())) {
                             currentTransaction.setAnimalFactor(Double.parseDouble(animalFactorTxt.getText()));
+                        }
                         else {
                             displayError("Animal Factor");
                             animalFactorTxt.setText("1");
@@ -360,31 +340,31 @@ public class gui extends Application {
                 );
 
                 if (currentTransaction.getOfficeVisitSelected())
-                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getOfficeVisitPrice() + "\tOffice Visit");
+                    receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getOfficeVisitPrice()) + "\t\tOffice Visit");
 
                 if (currentTransaction.getXRaySelected())
-                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getXRayPrice() + "\tX-Ray");
+                    receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getXRayPrice()) + "\t\tX-Ray");
 
                 if (currentTransaction.getSpecExamSelected())
-                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getSpecExamPrice() + "\tSpecimen Examination");
+                    receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getSpecExamPrice()) + "\t\tSpecimen Examination");
 
                 if (currentTransaction.getRabiesSelected())
-                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getRabiesPrice() + "\tRabies Vaccination");
+                    receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getRabiesPrice()) + "\t\tRabies Vaccination");
 
                 if (currentTransaction.getKennelCoughSelected())
-                    receiptOutput.appendText("\n\t\t$" + currentTransaction.getKennelCoughPrice() + "\tKennel Cough Vaccination");
+                    receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getKennelCoughPrice()) + "\t\tKennel Cough Vaccination");
 
                 if (currentTransaction.getAntibaVSelected()) {
                     for (int i = 0; i < currentTransaction.getUnitsAdministered(); i++)
-                        receiptOutput.appendText("\n\t\t$" + currentTransaction.getAntibaVPrice() + "\tAntiba-V Vaccination");
+                        receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getAntibaVPrice()) + "\t\tAntiba-V Vaccination");
                 }
 
                 if (currentTransaction.getDiscount() > 0)
-                    receiptOutput.appendText("\n\n\t\t$-" + currentTransaction.getDiscount() + "\tDiscount Amount");
+                    receiptOutput.appendText("\n\n\t\t$-" + String.format("%.2f", currentTransaction.getDiscount()) + "\t\tDiscount Amount");
 
                 receiptOutput.appendText(
-                        "\n\nSubtotal: $" + currentTransaction.getSubtotal() + " + $" + currentTransaction.getTax() + " Sales Tax\n"
-                                + "\nGrand Total: $" + currentTransaction.getTotal()
+                        "\n\nSubtotal: $" + String.format("%.2f", currentTransaction.getSubtotal()) + " + $" + String.format("%.2f", currentTransaction.getTax()) + " Sales Tax\n"
+                                + "\nGrand Total: $" + String.format("%.2f", currentTransaction.getTotal())
                 );
 
                 receiptOutput.appendText("\n-----------------------------------------------------------------------------\n");
@@ -405,6 +385,28 @@ public class gui extends Application {
         primaryStage.setMinHeight(800);
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    private void limitNumeric(TextField weightTxt, TextField discountTxt, TextField animalFactorTxt) {
+        weightTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                weightTxt.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        // force the phone number field to be numeric only
+        animalFactorTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                animalFactorTxt.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        // force the phone number field to be numeric only
+        discountTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                discountTxt.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     private boolean isPetInfoFilled(TextField petNametxt, TextField speciesTxt, TextField weightTxt) {
