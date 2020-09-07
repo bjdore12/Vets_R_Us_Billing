@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -106,9 +108,9 @@ public class gui extends Application {
 
         //All text fields that will be used to collect input
         TextField firstNameTxt = new TextField();
-        TextField middleInitialTxt = new TextField();
+        LimitedTextField middleInitialTxt = new LimitedTextField(1);
         TextField lastNameTxt = new TextField();
-        TextField phoneNumberTxt = new TextField();
+        LimitedTextField phoneNumberTxt = new LimitedTextField(10);
         TextField petNametxt = new TextField();
         TextField speciesTxt = new TextField();
         TextField weightTxt = new TextField();
@@ -250,6 +252,46 @@ public class gui extends Application {
                 currentTransaction.setAntivaVSelected(false);
             }
 
+        });
+
+        // force the phone number field to be numeric only
+        phoneNumberTxt.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    phoneNumberTxt.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        // force the phone number field to be numeric only
+        weightTxt.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    weightTxt.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        // force the phone number field to be numeric only
+        animalFactorTxt.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    animalFactorTxt.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        // force the phone number field to be numeric only
+        discountTxt.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    discountTxt.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
         });
 
         btnClear.setOnAction(new ClearHandler(receiptOutput));
