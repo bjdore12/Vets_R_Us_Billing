@@ -139,7 +139,7 @@ public class GUI extends Application {
         LimitedTextField weightTxt = new LimitedTextField(4);
 
         // Discount value and animal factor fields
-        TextField discountTxt = new TextField();
+        LimitedTextField discountTxt = new LimitedTextField(10);
         LimitedTextField animalFactorTxt = new LimitedTextField(4);
 
         // Receipt output field, set so user cannot edit
