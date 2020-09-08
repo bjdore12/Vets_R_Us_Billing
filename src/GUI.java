@@ -235,29 +235,19 @@ public class GUI extends Application {
         hBox.getChildren().add(outputBox);
 
         // Office visit selected? (Yes/No)
-        chkOfficeVisit.setOnAction(e -> {
-            currentTransaction.setOfficeVisitSelected(chkOfficeVisit.isSelected());
-        });
+        chkOfficeVisit.setOnAction(e -> currentTransaction.setOfficeVisitSelected(chkOfficeVisit.isSelected()));
 
         // X-Ray selected? (Yes/No)
-        chkXRay.setOnAction(e -> {
-            currentTransaction.setxRaySelected(chkXRay.isSelected());
-        });
+        chkXRay.setOnAction(e -> currentTransaction.setxRaySelected(chkXRay.isSelected()));
 
         // Specimen Examination selected? (Yes/No)
-        chkSpecExam.setOnAction(e -> {
-            currentTransaction.setSpecExamSelected(chkSpecExam.isSelected());
-        });
+        chkSpecExam.setOnAction(e -> currentTransaction.setSpecExamSelected(chkSpecExam.isSelected()));
 
         // Rabies vaccine selected? (Yes/No)
-        chkRabies.setOnAction(e -> {
-            currentTransaction.setRabiesSelected(chkRabies.isSelected());
-        });
+        chkRabies.setOnAction(e -> currentTransaction.setRabiesSelected(chkRabies.isSelected()));
 
         // Kennel Cough vaccine selected? (Yes/No)
-        chkKennel.setOnAction(e -> {
-            currentTransaction.setKennelCoughSelected(chkKennel.isSelected());
-        });
+        chkKennel.setOnAction(e -> currentTransaction.setKennelCoughSelected(chkKennel.isSelected()));
 
         // Antiba-V selected? (Yes/No)
         //
