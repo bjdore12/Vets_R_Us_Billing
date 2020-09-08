@@ -19,7 +19,7 @@ public class Transaction {
     // Vaccinations
     private final double RABIES = 8.00;
     private final double KENNEL_COUGH = 6.00;
-    private final double ANTIVA_V = 5.00;
+    private final double ANTIBA_V = 5.00;
 
     private final double MICH_SALES_TAX = 0.06;
 
@@ -29,7 +29,7 @@ public class Transaction {
     private boolean specExamSelected;
     private boolean rabiesSelected;
     private boolean kennelCoughSelected;
-    private boolean antivaVSelected;
+    private boolean antibaVSelected;
 
     // Used to calculate units administered for Antiba-V
     private double animalFactor;
@@ -58,8 +58,8 @@ public class Transaction {
         this.kennelCoughSelected = isSelected;
     }
 
-    public void setAntivaVSelected(boolean isSelected) {
-        this.antivaVSelected = isSelected;
+    public void setAntibaVSelected(boolean isSelected) {
+        this.antibaVSelected = isSelected;
     }
 
     // Set the animal factor, NOTE: animal factor cannot be 0 otherwise there is a divide by 0 error
@@ -97,7 +97,7 @@ public class Transaction {
     }
 
     public boolean getAntibaVSelected() {
-        return this.antivaVSelected;
+        return this.antibaVSelected;
     }
 
     public double getAnimalWeight() {
@@ -133,7 +133,7 @@ public class Transaction {
     }
 
     public double getAntibaVPrice() {
-        return ANTIVA_V;
+        return ANTIBA_V;
     }
 
     public double getSalesTax() { return MICH_SALES_TAX; }
@@ -153,7 +153,7 @@ public class Transaction {
         this.specExamSelected = false;
         this.rabiesSelected = false;
         this.kennelCoughSelected = false;
-        this.antivaVSelected = false;
+        this.antibaVSelected = false;
 
         this.animalFactor = 0;
         this.animalWeight = 0;
@@ -181,7 +181,7 @@ public class Transaction {
             subtotal += KENNEL_COUGH;
 
         if (getAntibaVSelected())
-            subtotal += getUnitsAdministered() * ANTIVA_V;
+            subtotal += getUnitsAdministered() * ANTIBA_V;
 
         if (discountAmount > 0)
             subtotal -= discountAmount;

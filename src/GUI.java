@@ -121,7 +121,7 @@ public class GUI extends Application {
         // Vaccinations
         Label rabiesVac = new Label("Rabies ($8.00)");
         Label kennelVac = new Label("Kennel Cough ($6.00)");
-        Label antibaVac = new Label("Antiva-V ($5.00/Unit Administered)");
+        Label antibaVac = new Label("Antiba-V ($5.00/Unit Administered)");
 
         Label discountAmount = new Label("Discount: ");
 
@@ -269,13 +269,13 @@ public class GUI extends Application {
                 animalFactorTxt.setText("1");                   // Default animal factor
                 animalFactor.setVisible(true);
                 animalFactorTxt.setVisible(true);
-                currentTransaction.setAntivaVSelected(true);
+                currentTransaction.setAntibaVSelected(true);
             }
             else {
                 animalFactorTxt.setText("");
                 animalFactor.setVisible(false);
                 animalFactorTxt.setVisible(false);
-                currentTransaction.setAntivaVSelected(false);
+                currentTransaction.setAntibaVSelected(false);
             }
 
         });
