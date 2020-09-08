@@ -16,8 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-import javax.xml.soap.Text;
-
 class ClearHandler implements EventHandler<ActionEvent> {
 
     //Below fields are for all inputs and outputs of the UI that will be reset

@@ -55,12 +55,13 @@ public class PetOwner {
         return this.lastName;
     }
 
+    // Format the phone number in the 'phone' format
     public String getPhoneNumber() {
         return String.valueOf(this.phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
     }
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.middleInitial + ". " + this.lastName + "\n" + "Phone: " + this.phoneNumber;
+        return this.firstName + " " + this.middleInitial + ". " + this.lastName + "\n" + "Phone: " + getPhoneNumber();
     }
 }

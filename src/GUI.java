@@ -9,8 +9,6 @@
 */
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -23,15 +21,18 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        // Defines the current transaction, contains the services and prices for the specific transaction
         Transaction currentTransaction = new Transaction();
 
         Button btnSubmit = new Button("Submit");
         Button btnClear = new Button("Clear");
 
+        // Will hold all the form input fields and the buttons
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(10, 10, 5, 10));
         vBox.setSpacing(10);
 
+        // Main HBox that will hold all UI components (i.e. the above VBox and the Output text area
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(10, 10, 5, 10));
         hBox.setSpacing(10);
@@ -159,23 +160,23 @@ public class GUI extends Application {
         animalFactor.setVisible(false);
         animalFactorTxt.setVisible(false);
 
-        petOwnerPane.add(firstName, 0,0);
-        petOwnerPane.add(middleInitial, 1, 0);
-        petOwnerPane.add(lastName, 2, 0);
+        // Add all the pet owner labels and text fields to the Pet Owner Pane
+        petOwnerPane.add(firstName, 0,0);             // Label
+        petOwnerPane.add(middleInitial, 1, 0);        // Label
+        petOwnerPane.add(lastName, 2, 0);             // Label
+        petOwnerPane.add(firstNameTxt, 0, 1);         // Text Field
+        petOwnerPane.add(middleInitialTxt, 1, 1);     // Text Field
+        petOwnerPane.add(lastNameTxt, 2, 1);          // Text Field
+        petOwnerPane.add(phoneNumber, 0, 2);          // Label
+        petOwnerPane.add(phoneNumberTxt, 0, 3);       // Text Field
 
-        petOwnerPane.add(firstNameTxt, 0, 1);
-        petOwnerPane.add(middleInitialTxt, 1, 1);
-        petOwnerPane.add(lastNameTxt, 2, 1);
-
-        petOwnerPane.add(phoneNumber, 0, 2);
-        petOwnerPane.add(phoneNumberTxt, 0, 3);
-
-        petPane.add(petName, 0, 0);
-        petPane.add(species, 1, 0);
-        petPane.add(weight, 2 ,0);
-        petPane.add(petNametxt, 0, 1);
-        petPane.add(speciesTxt, 1, 1);
-        petPane.add(weightTxt, 2, 1);
+        // Add all the pet labels and text fields to the Pet Pane
+        petPane.add(petName, 0, 0);         // Label
+        petPane.add(species, 1, 0);         // Label
+        petPane.add(weight, 2 ,0);          // Label
+        petPane.add(petNametxt, 0, 1);      // Text Field
+        petPane.add(speciesTxt, 1, 1);      // Text Field
+        petPane.add(weightTxt, 2, 1);       // Text Field
 
         officeVisitBox.getChildren().add(chkOfficeVisit);
         officeVisitBox.getChildren().add(officeVisit);
@@ -233,29 +234,39 @@ public class GUI extends Application {
         hBox.getChildren().add(vBox);
         hBox.getChildren().add(outputBox);
 
+        // Office visit selected? (Yes/No)
         chkOfficeVisit.setOnAction(e -> {
             currentTransaction.setOfficeVisitSelected(chkOfficeVisit.isSelected());
         });
 
+        // X-Ray selected? (Yes/No)
         chkXRay.setOnAction(e -> {
             currentTransaction.setxRaySelected(chkXRay.isSelected());
         });
 
+        // Specimen Examination selected? (Yes/No)
         chkSpecExam.setOnAction(e -> {
             currentTransaction.setSpecExamSelected(chkSpecExam.isSelected());
         });
 
+        // Rabies vaccine selected? (Yes/No)
         chkRabies.setOnAction(e -> {
             currentTransaction.setRabiesSelected(chkRabies.isSelected());
         });
 
+        // Kennel Cough vaccine selected? (Yes/No)
         chkKennel.setOnAction(e -> {
             currentTransaction.setKennelCoughSelected(chkKennel.isSelected());
         });
 
+        // Antiba-V selected? (Yes/No)
+        //
+        // NOTE: The animal factor label and text field only show if the Antiba-V
+        //       check box is selected
+        //
         chkAntiba.setOnAction(e -> {
             if (chkAntiba.isSelected()) {
-                animalFactorTxt.setText("1");
+                animalFactorTxt.setText("1");                   // Default animal factor
                 animalFactor.setVisible(true);
                 animalFactorTxt.setVisible(true);
                 currentTransaction.setAntivaVSelected(true);
@@ -269,20 +280,10 @@ public class GUI extends Application {
 
         });
 
-        // force the phone number field to be numeric only
-        phoneNumberTxt.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    phoneNumberTxt.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-
         // force the phone number, weight, animal factor and discount field to be numeric only
-        limitNumeric(weightTxt, discountTxt, animalFactorTxt);
+        limitNumeric(phoneNumberTxt, weightTxt, discountTxt, animalFactorTxt);
 
-        //Clear the output text field
+        // When the clear button is clicked, clear the output text field and all check boxes/text fields
         btnClear.setOnAction(new ClearHandler(receiptOutput,
                 firstNameTxt,
                 middleInitialTxt,
@@ -302,9 +303,19 @@ public class GUI extends Application {
                 animalFactorTxt,
                 currentTransaction));
 
+
+        // ------------ BELOW CODE OCCURS WHEN 'SUBMIT' BUTTON IS CLICKED ------------
+
         btnSubmit.setOnAction(e -> {
+            // Are all the required fields filled?
             if (isPetOwnerFilled(firstNameTxt, middleInitialTxt, lastNameTxt, phoneNumberTxt) && isPetInfoFilled(petNametxt, speciesTxt, weightTxt)) {
 
+                // If the Antiba-V is selected, make sure the animal factor isn't a blank string and is numeric, so long as that is true,
+                // set the transaction animal factor to what is in the animal factor field (if 0, make it a 1 to avoid div/0).
+                //
+                // If the string isn't numeric, alert the user this is invalid and set to 1 by default.
+                //
+                // If the animal factor is blank, alert the user this is invalid and set to 1 by default.
                 if (chkAntiba.isSelected()) {
                     if (!animalFactorTxt.getText().equals("")) {
                         if (isNumeric(animalFactorTxt.getText())) {
@@ -323,6 +334,8 @@ public class GUI extends Application {
                     }
                 }
 
+                // Check if the weight field has a numeric value, if so add it to the transaction,
+                // if not, alert the user the weight value is invalid and default to 0
                 if (isNumeric(weightTxt.getText()))
                     currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
                 else {
@@ -331,6 +344,8 @@ public class GUI extends Application {
                     currentTransaction.setAnimalWeight(Double.parseDouble(weightTxt.getText()));
                 }
 
+                // Check if the discount field is not blank, if so make sure the discount value is a number and add it to the transaction.
+                // If the discount value is not a number, alert the user this is invalid and set the discount value to 0
                 if (!discountTxt.getText().equals("")) {
                     if (isNumeric(discountTxt.getText()))
                         currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
@@ -340,11 +355,14 @@ public class GUI extends Application {
                         currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
                     }
                 }
+                // If the discount value is blank, default to 0. It is assumed that if the user doesn't enter a discount value, then
+                // no discount is applied to the transaction
                 else {
                     discountTxt.setText("0");
                     currentTransaction.setDiscountAmount(Double.parseDouble(discountTxt.getText()));
                 }
 
+                // Define the pet owner based on what was entered in the pet owner fields
                 PetOwner owner = new PetOwner(
                         firstNameTxt.getText(),
                         middleInitialTxt.getText(),
@@ -352,48 +370,58 @@ public class GUI extends Application {
                         phoneNumberTxt.getText()
                 );
 
+                // Define the pet based on what was entered in the pet fields
                 Pet pet = new Pet(
                         petNametxt.getText(),
                         speciesTxt.getText(),
                         Integer.parseInt(weightTxt.getText())
                 );
 
+                // Print the date and time, and customer/pet information in the receipt field.
                 receiptOutput.setText(
                         "-------------------------------- VETS 'R' US --------------------------------\n"
-                                + "\t\t\t\t\t\t\t" + new DateTime().getDateAndTime()
+                                + "\t\t\t\t\t" + new DateTime().getDateAndTime()
                                 + "\n\nCustomer Information\n\n"
-                                + "\t\tCustomer Name:\t" + owner.getFullName() + "\n"
+                                + "\t\tCustomer Name:\t\t" + owner.getFullName() + "\n"
                                 + "\t\tPhone Number:\t\t" + owner.getPhoneNumber() + "\n"
                                 + "\nPet Information\n\n"
                                 + "\t\tPet Name:\t\t" + pet.getPetName() + "\n"
-                                + "\t\tPet Species:\t" + pet.getPetSpecies() + "\n"
+                                + "\t\tPet Species:\t\t" + pet.getPetSpecies() + "\n"
                                 + "\t\tPet Weight:\t\t" + pet.getPetWeight() + "lbs\n"
                                 + "\nTransaction Info\n"
                 );
 
+                // Print office visit price if the option was selected
                 if (currentTransaction.getOfficeVisitSelected())
                     receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getOfficeVisitPrice()) + "\t\tOffice Visit");
 
+                // Print X-Ray price if the option was selected
                 if (currentTransaction.getXRaySelected())
                     receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getXRayPrice()) + "\t\tX-Ray");
 
+                // Print office Specimen Examination price if the option was selected
                 if (currentTransaction.getSpecExamSelected())
                     receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getSpecExamPrice()) + "\t\tSpecimen Examination");
 
+                // Print Rabies Vaccine price if the option was selected
                 if (currentTransaction.getRabiesSelected())
                     receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getRabiesPrice()) + "\t\tRabies Vaccination");
 
+                // Print Kennel Cough Vaccine price if the option was selected
                 if (currentTransaction.getKennelCoughSelected())
                     receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getKennelCoughPrice()) + "\t\tKennel Cough Vaccination");
 
+                // Print Antiba-V price if the option was selected, do this for each unit administered (ex. if administered 3 times, print the price 3 times)
                 if (currentTransaction.getAntibaVSelected()) {
                     for (int i = 0; i < currentTransaction.getUnitsAdministered(); i++)
                         receiptOutput.appendText("\n\t\t$" + String.format("%.2f", currentTransaction.getAntibaVPrice()) + "\t\tAntiba-V Vaccination");
                 }
 
+                // Print discount amount if a discount is entered
                 if (currentTransaction.getDiscount() > 0)
                     receiptOutput.appendText("\n\n\t\t$-" + String.format("%.2f", currentTransaction.getDiscount()) + "\t\tDiscount Amount");
 
+                // Print the subtotal before tax, the tax amount, and the final grand total of the transaction
                 receiptOutput.appendText(
                         "\n\nSubtotal: $" + String.format("%.2f", currentTransaction.getSubtotal()) + " + $" + String.format("%.2f", currentTransaction.getTax()) + " Sales Tax\n"
                                 + "\nGrand Total: $" + String.format("%.2f", currentTransaction.getTotal())
@@ -402,51 +430,67 @@ public class GUI extends Application {
                 receiptOutput.appendText("\n-----------------------------------------------------------------------------\n");
 
             } else
+                // Display an error message if any of the fields in the pet, or pet owner sections are not filled out
                 displayError("Pet and Owner Info");
         });
 
-        //Adds all panes to a scene and sets scene size.
+        // ------------ ABOVE CODE OCCURS WHEN 'SUBMIT' BUTTON IS CLICKED ------------
+
+        // Adds all panes to a scene and sets scene size.
         Scene scene = new Scene(hBox, 520, 635);
 
-        //Creates and displays the stage.
+        // Creates and displays the stage.
         primaryStage.setTitle("Vets 'R' Us");
         primaryStage.setScene(scene);
         primaryStage.setMaxWidth(1000);
         primaryStage.setMinWidth(1000);
         primaryStage.setMaxHeight(800);
         primaryStage.setMinHeight(800);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(false);   // Don't allow the user to modify the size of the window, Cannot maximize window
         primaryStage.show();
     }
 
-    private void limitNumeric(TextField weightTxt, TextField discountTxt, TextField animalFactorTxt) {
+    // Limit text fields so they can only accept numeric strings
+    private void limitNumeric(TextField phoneNumberTxt, TextField weightTxt, TextField discountTxt, TextField animalFactorTxt) {
+
+        // force the phone number field to be numeric only
+        phoneNumberTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                phoneNumberTxt.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        // force the weight factor field to be numeric only
         weightTxt.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 weightTxt.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
 
-        // force the phone number field to be numeric only
+        // force the animal factor field to be numeric only
         animalFactorTxt.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 animalFactorTxt.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
 
-        // force the phone number field to be numeric only
+        // force the discount field to be numeric only
         discountTxt.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 discountTxt.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+
     }
 
+    // Check that all fields for the Pet are filled
     private boolean isPetInfoFilled(TextField petNametxt, TextField speciesTxt, TextField weightTxt) {
         return !petNametxt.getText().equals("")
                 && !speciesTxt.getText().equals("")
                 && !weightTxt.getText().equals("");
     }
 
+    // Check that all fields for the Pet Owner are filled
     private boolean isPetOwnerFilled(TextField firstNameTxt, TextField middleInitialTxt, TextField lastNameTxt, TextField phoneNumberTxt) {
         return !firstNameTxt.getText().equals("")
                 && !middleInitialTxt.getText().equals("")
@@ -454,21 +498,23 @@ public class GUI extends Application {
                 && !phoneNumberTxt.getText().equals("");
     }
 
-    //Displays an error message, intended for when fields are not filled.
+    // Displays an error message, intended for when fields are not filled.
     public static void displayError(String issue) {
         Stage errorStage =  new Stage();
         errorStage.setTitle("Error");
         errorStage.setScene(new Scene(new StackPane(new Label("Error! Please make sure " + issue.trim() + " is filled correctly!")), 400, 50));
         errorStage.show();
-        errorStage.setResizable(false); //Error message window not resizable
+        errorStage.setResizable(false); // Error message window not resizable
     }
 
+    // Check to see if a particular string is a number
     public static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
             return true;
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e){
             return false;
         }
     }
+
 }
